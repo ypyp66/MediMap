@@ -1,9 +1,8 @@
-
 - [프로젝트 이슈 기록]
     - [기획 관련 이슈](#algorithms-and-design-patterns)
     - [개발 관련 이슈](#asgi-servers)
     
-## 기획 관련 이슈
+## algorithms-and-design-patterns
 
 *Python implementation of data structures, algorithms and design patterns. Also see [awesome-algorithms](https://github.com/tayllan/awesome-algorithms).*
 
