@@ -1,18 +1,9 @@
-1. 프로젝트 기획 관련 이슈
-2. 개발 관련 이슈
 
-# 
-
-A curated list of awesome Python frameworks, libraries, software and resources.
-
-Inspired by [awesome-php](https://github.com/ziadoz/awesome-php).
-
-- [프로젝트 기획 관련 이슈](#awesome-python)
-    - [Admin Panels](#admin-panels)
-    - [Algorithms and Design Patterns](#algorithms-and-design-patterns)
-    - [ASGI Servers](#asgi-servers)
+- [프로젝트 이슈 기록]
+    - [기획 관련 이슈](#algorithms-and-design-patterns)
+    - [개발 관련 이슈](#asgi-servers)
     
-## Algorithms and Design Patterns
+## 기획 관련 이슈
 
 *Python implementation of data structures, algorithms and design patterns. Also see [awesome-algorithms](https://github.com/tayllan/awesome-algorithms).*
 
