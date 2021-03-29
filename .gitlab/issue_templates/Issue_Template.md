@@ -1,20 +1,34 @@
 - [프로젝트 이슈 기록]
-    - [기획 관련 이슈](#기획-관련-이슈)
-    - [개발 관련 이슈](#asgi-servers)
+    - [기획 관련 이슈](#기획-이슈)
+    - [개발 관련 이슈](#개발-이슈)
     
-## 기획 관련 이슈
+## 기획 이슈
 
-*Python implementation of data structures, algorithms and design patterns. Also see [awesome-algorithms](https://github.com/tayllan/awesome-algorithms).*
+### 1. 기획 및 프로젝트 제안서 작성 시 이슈가 있었다면 무엇이었는지 기입해주세요
 
-* Algorithms
-    * [algorithms](https://github.com/keon/algorithms) - Minimal examples of data structures and algorithms.
-    * [python-ds](https://github.com/prabhupant/python-ds) - A collection of data structure and algorithms for coding interviews.
-    * [sortedcontainers](https://github.com/grantjenks/python-sortedcontainers) - Fast and pure-Python implementation of sorted collections.
-    * [TheAlgorithms](https://github.com/TheAlgorithms/Python) - All Algorithms implemented in Python.
-* Design Patterns
-    * [PyPattyrn](https://github.com/tylerlaberge/PyPattyrn) - A simple yet effective library for implementing common design patterns.
-    * [python-patterns](https://github.com/faif/python-patterns) - A collection of design patterns in Python.
-    * [transitions](https://github.com/pytransitions/transitions) - A lightweight, object-oriented finite state machine implementation.
+예시)
+- 명확한 프로젝트 주제 설정의 어려움
+- 데이터분석을 활용한 최종적인 웹서비스의 목표를 설정하는 데의 어려움
+- 프로젝트 설계하는데 논리적인 흐름이 맞지 않음
+- 프로젝트 주제에 관련된 데이터를 찾기 어려움
+- 기타
+
+
+### 2. 이슈를 어떻게 고칠 것 인지 설명해주세요. (해결 방법을 못 찾을 시, 5. 궁금한 점에 기입해주세요.)
+
+
+
+
+### 3. 그 외 궁금한 점을 기입해주세요.
+
+1. 
+2. 
+
+
+
+
+
+## 개발 이슈
 
 
 ## 1. 개발 시 이슈가 있었다면 무엇이었는지 기입해주세요
