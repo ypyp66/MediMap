@@ -1,8 +1,6 @@
 /* global kakao */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../styles/polygon.scss";
-import seoul from "../data/seoul.json";
-import info from "../data/mainInfo.json";
 
 const KakaoMap = ({ locations }) => {
   const [isloaded, setIsloaded] = useState(false);

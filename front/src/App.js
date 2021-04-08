@@ -4,7 +4,6 @@ import MapContainer from "./containers/MapContainer";
 import MainMenuContainer from "./containers/MainMenuContainer";
 
 import "antd/dist/antd.css";
-import "./styles/main.scss";
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
