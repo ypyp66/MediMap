@@ -21,20 +21,27 @@ with open('./json_files_for_main/hospital.json') as json_file:
 with open('./json_files_for_main/ambul_medic.json') as json_file:
     ambul_medic_data = json.load(json_file)
 
+with open('./json_files_for_main/diagnosis.json') as json_file:
+    diagnosis_data = json.load(json_file)
+
 # 의사
 @app.route('/doctor', methods = ['GET', 'POST'])
 def doctor_info():
-    return doctor_data
+    return jsonify(doctor_data)
 
 # 병원
 @app.route('/hospital', methods = ['GET', 'POST'])
 def hospital_info():
-    return hospital_data
+    return jsonify(hospital_data)
     
 # 응급, 의료인력
 @app.route('/ambul-medic', methods = ['GET', 'POST'])
 def ambul_medic_info():
-    return ambul_medic_data
+    return jsonify(ambul_medic_data)
+
+@app.route('/diagnosis', methods = ['GET', 'POST'])
+def diagnosis_info():
+    return jsonify(diagnosis_data)
 
 if __name__ == "__main__":
     app.run("0.0.0.0", port=5000)
