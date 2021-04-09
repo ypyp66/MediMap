@@ -39,6 +39,7 @@ def hospital_info():
 def ambul_medic_info():
     return jsonify(ambul_medic_data)
 
+# 진료
 @app.route('/diagnosis', methods = ['GET', 'POST'])
 def diagnosis_info():
     return jsonify(diagnosis_data)
