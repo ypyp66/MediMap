@@ -15,8 +15,7 @@ const DataContainer = styled.div`
   align-items: center;
 `;
 
-function MainButton({ mainValue, subValue, mainChange, subChange }) {
-  console.log(mainValue, subValue);
+function MainButton({ mainChange, subChange }) {
   const [disease, setDisease] = useState(false);
   const [target, setTarget] = useState(false);
 
@@ -100,7 +99,8 @@ function MainButton({ mainValue, subValue, mainChange, subChange }) {
               variant="outlined"
               size="small"
               color="primary"
-              name={`disease${data.id}`}
+              onClick={subClick}
+              name={data.id}
               style={{ marginRight: "0.5rem" }}
             >
               {data.name}

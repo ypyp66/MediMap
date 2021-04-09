@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../styles/polygon.scss";
 
-const KakaoMap = ({ locations, mainburb, suburb }) => {
+const KakaoMap = ({ locations, mainValue, subValue }) => {
   const [isloaded, setIsloaded] = useState(false);
   const [kakaoMap, setKakaoMap] = useState(null);
   const [customOverlay, setCustomOverlay] = useState();
@@ -12,8 +12,8 @@ const KakaoMap = ({ locations, mainburb, suburb }) => {
   const container = useRef();
 
   useEffect(() => {
-    console.log(mainburb, suburb);
-  }, [mainburb, suburb]);
+    console.log(mainValue, subValue);
+  }, [mainValue, subValue]);
 
   useEffect(() => {
     setMap();
@@ -117,7 +117,7 @@ const KakaoMap = ({ locations, mainburb, suburb }) => {
       // 다각형에 mouseover 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 변경합니다
       // 지역명을 표시하는 커스텀오버레이를 지도위에 표시합니다
       kakao.maps.event.addListener(polygon, "mouseover", function (mouseEvent) {
-        polygon.setOptions({ fillColor: "#09f" });
+        polygon.setOptions({ fillColor: "rgba(100,200,38, 0.7)" });
 
         customOverlay.setContent(`<div class="area">${area.name}</div>`);
 
