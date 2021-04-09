@@ -1,6 +1,7 @@
 /* global kakao */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../styles/polygon.scss";
+import * as api from "../api";
 
 const KakaoMap = ({ locations, mainValue, subValue }) => {
   const [isloaded, setIsloaded] = useState(false);
@@ -8,12 +9,24 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
   const [customOverlay, setCustomOverlay] = useState();
   const [infowindow, setInfowindow] = useState();
   const [zoom, setZoom] = useState(13);
+  const [target, setTarget] = useState();
 
   const container = useRef();
 
   useEffect(() => {
-    console.log(mainValue, subValue);
+    if (mainValue === "target") {
+      getApi();
+    }
+  }, [mainValue]);
+
+  useEffect(() => {
+    console.log(mainValue);
+    console.log(subValue);
   }, [mainValue, subValue]);
+
+  useEffect(() => {
+    console.log(target);
+  }, [target]);
 
   useEffect(() => {
     setMap();
@@ -26,14 +39,23 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
 
   useEffect(() => {
     if (isloaded) {
+      if (target) {
+        locations.forEach((location) => displayArea(location, subValue));
+        return;
+      }
       locations.forEach((location) => displayArea(location));
     }
-  }, [isloaded]);
+  }, [isloaded, subValue]);
 
   useEffect(() => {
     zoomChange();
     test();
   }, [kakaoMap]);
+
+  async function getApi() {
+    const result = await api.getTargets();
+    setTarget(result);
+  }
 
   const setPath = useCallback(() => {
     locations.forEach((location) => {
@@ -80,30 +102,17 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
     kakao.maps.event.addListener(kakaoMap, "dblclick", function (mouseEvent) {
       console.log("더블클릭");
     });
-
-    kakao.maps.event.addListener(kakaoMap, "center_changed", function () {
-      // 지도의  레벨을 얻어옵니다
-      let level = kakaoMap.getLevel();
-
-      // 지도의 중심좌표를 얻어옵니다
-      let latlng = kakaoMap.getCenter();
-
-      let message = "<p>지도 레벨은 " + level + " 이고</p>";
-      message +=
-        "<p>중심 좌표는 위도 " +
-        latlng.getLat() +
-        ", 경도 " +
-        latlng.getLng() +
-        "입니다</p>";
-
-      //console.log(message);
-    });
   }, [kakaoMap]);
 
   //다각형 생성함수
   const displayArea = useCallback(
     (area) => {
       // 다각형을 생성합니다
+      if (target) {
+        console.log(
+          target[subValue].filter((data) => data.name === area.name)[0]
+        );
+      }
       var polygon = new kakao.maps.Polygon({
         map: kakaoMap, // 다각형을 표시할 지도 객체
         path: area.path,
@@ -113,16 +122,23 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
         fillColor: "#fff",
         fillOpacity: 0.7,
       });
-
       // 다각형에 mouseover 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 변경합니다
       // 지역명을 표시하는 커스텀오버레이를 지도위에 표시합니다
       kakao.maps.event.addListener(polygon, "mouseover", function (mouseEvent) {
-        polygon.setOptions({ fillColor: "rgba(100,200,38, 0.7)" });
-
-        customOverlay.setContent(`<div class="area">${area.name}</div>`);
-
-        customOverlay.setPosition(mouseEvent.latLng);
-        customOverlay.setMap(kakaoMap);
+        if (target) {
+          console.log(
+            target[subValue].filter((data) => data.name === area.name)[0]
+          );
+          customOverlay.setContent(`
+        <div class="area">
+          ${target[subValue].filter((data) => data.name === area.name)[0].hover}
+        </div>`);
+        } else {
+          polygon.setOptions({ fillColor: "rgba(100,200,38, 0.7)" });
+          customOverlay.setContent(`<div class="area">${area.name}</div>`);
+          customOverlay.setPosition(mouseEvent.latLng);
+          customOverlay.setMap(kakaoMap);
+        }
       });
 
       // 다각형에 mousemove 이벤트를 등록하고 이벤트가 발생하면 커스텀 오버레이의 위치를 변경합니다
@@ -154,7 +170,7 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
         kakaoMap.setLevel(9);
       });
     },
-    [kakaoMap, customOverlay, infowindow]
+    [kakaoMap, customOverlay, infowindow, subValue]
   );
 
   return <div ref={container} style={{ width: "100%", height: "70vh" }} />;
