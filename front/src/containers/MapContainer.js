@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import KakaoMap from "../components/KakaoMap";
 import sido from "../data/sido.json";
+import { connect } from "react-redux";
 
-function MapContainer() {
+function MapContainer({ mainburb, suburb }) {
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
@@ -14,7 +15,12 @@ function MapContainer() {
 
     setLocations(newLocation);
   }, []);
-  return <KakaoMap locations={locations} />;
+  return <KakaoMap locations={locations} mainburb={mainburb} suburb={suburb} />;
 }
 
-export default MapContainer;
+const mapStateToProps = (state) => ({
+  //state는 현재 스토어가 지니고 있는 상태
+  mainburb: state.change.mainburb,
+  suburb: state.change.suburb,
+});
+export default connect(mapStateToProps)(MapContainer);

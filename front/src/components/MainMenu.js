@@ -1,5 +1,5 @@
 import { Button } from "@material-ui/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const ButtonContainer = styled.div`
@@ -15,7 +15,8 @@ const DataContainer = styled.div`
   align-items: center;
 `;
 
-function MainButton() {
+function MainButton({ mainValue, subValue, mainChange, subChange }) {
+  console.log(mainValue, subValue);
   const [disease, setDisease] = useState(false);
   const [target, setTarget] = useState(false);
 
@@ -41,10 +42,12 @@ function MainButton() {
       setTarget(!target);
       setDisease(false);
     }
+    mainChange(name);
   };
 
   const subClick = (e) => {
-    console.log(e.currentTarget.name);
+    const { name } = e.currentTarget;
+    subChange(name);
   };
   return (
     <div
@@ -77,7 +80,7 @@ function MainButton() {
 
       <DataContainer>
         {disease &&
-          diseaseData.map((data, index) => (
+          diseaseData.map((data) => (
             <Button
               key={data.id}
               variant="outlined"
@@ -91,7 +94,7 @@ function MainButton() {
             </Button>
           ))}
         {target &&
-          targetData.map((data, index) => (
+          targetData.map((data) => (
             <Button
               key={data.id}
               variant="outlined"

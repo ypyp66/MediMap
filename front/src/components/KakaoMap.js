@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../styles/polygon.scss";
 
-const KakaoMap = ({ locations }) => {
+const KakaoMap = ({ locations, mainburb, suburb }) => {
   const [isloaded, setIsloaded] = useState(false);
   const [kakaoMap, setKakaoMap] = useState(null);
   const [customOverlay, setCustomOverlay] = useState();
@@ -10,7 +10,10 @@ const KakaoMap = ({ locations }) => {
   const [zoom, setZoom] = useState(13);
 
   const container = useRef();
-  //console.log(locations);
+
+  useEffect(() => {
+    console.log(mainburb, suburb);
+  }, [mainburb, suburb]);
 
   useEffect(() => {
     setMap();
@@ -93,7 +96,7 @@ const KakaoMap = ({ locations }) => {
         latlng.getLng() +
         "입니다</p>";
 
-      console.log(message);
+      //console.log(message);
     });
   }, [kakaoMap]);
 
