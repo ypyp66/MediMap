@@ -9,7 +9,6 @@ function MapContainer() {
     const newLocation = sido.features.map((arr) => {
       const name = arr.properties.CTP_KOR_NM;
       const path = arr.geometry.coordinates;
-
       return { name, path };
     });
 
