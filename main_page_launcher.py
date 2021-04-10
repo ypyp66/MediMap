@@ -21,6 +21,9 @@ with open('./json_files_for_main/hospital.json') as json_file:
 with open('./json_files_for_main/ambul_medic.json') as json_file:
     ambul_medic_data = json.load(json_file)
 
+with open('./json_files_for_main/diagnosis.json') as json_file:
+    diagnosis_data = json.load(json_file)
+
 # 의사
 @app.route('/doctor', methods = ['GET', 'POST'])
 def doctor_info():
@@ -35,6 +38,11 @@ def hospital_info():
 @app.route('/ambul-medic', methods = ['GET', 'POST'])
 def ambul_medic_info():
     return jsonify(ambul_medic_data)
+
+# 진료
+@app.route('/diagnosis', methods = ['GET', 'POST'])
+def diagnosis_info():
+    return jsonify(diagnosis_data)
 
 if __name__ == "__main__":
     app.run("0.0.0.0", port=5000)

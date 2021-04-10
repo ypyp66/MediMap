@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../styles/polygon.scss";
 import * as api from "../api";
 import { connect } from "react-redux";
+import Test from "./Test";
 
 const KakaoMap = ({ locations, mainValue, subValue }) => {
   const [isloaded, setIsloaded] = useState(false);
@@ -130,7 +131,7 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
       // 다각형에 mouseover 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 변경합니다
       // 지역명을 표시하는 커스텀오버레이를 지도위에 표시합니다
       kakao.maps.event.addListener(polygon, "mouseover", function (mouseEvent) {
-        let content = `<div class="area">${getName()}</div>`;
+        let content = <Test />; //`<div class="area">${getName()}</div>`;
 
         if (target) {
           const indications = {

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import KakaoMap from "../components/KakaoMap";
 import sido from "../data/sido.json";
-import { connect } from "react-redux";
 
-function MapContainer({ mainValue, subValue }) {
+function MapContainer() {
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
@@ -18,18 +17,9 @@ function MapContainer({ mainValue, subValue }) {
 
   return (
     <>
-      <KakaoMap
-        locations={locations}
-        mainValue={mainValue}
-        subValue={subValue}
-      />
+      <KakaoMap locations={locations} />
     </>
   );
 }
 
-const mapStateToProps = (state) => ({
-  //state는 현재 스토어가 지니고 있는 상태
-  mainValue: state.change.mainValue,
-  subValue: state.change.subValue,
-});
-export default connect(mapStateToProps)(MapContainer);
+export default MapContainer;
