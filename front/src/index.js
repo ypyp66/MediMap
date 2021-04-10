@@ -3,12 +3,32 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import DetailContainer from "./containers/DetailContainer";
+import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+
+const theme = createMuiTheme({
+  typography: {
+    fontFamily: '"Recursive","Noto Sans KR", sans-serif',
+  },
+  palette: {
+    primary: {
+      light: "#ffffff",
+      main: "#ffe9db",
+      dark: "#ccb7a9",
+      contrastText: "#000000",
+    },
+    secondary: {
+      light: "#fbfffc",
+      main: "#c8e6c9",
+      dark: "#97b498",
+      contrastText: "#000",
+    },
+  },
+});
 
 ReactDOM.render(
-  <React.StrictMode>
+  <ThemeProvider theme={theme}>
     <App />
-  </React.StrictMode>,
+  </ThemeProvider>,
   document.getElementById("root")
 );
 
