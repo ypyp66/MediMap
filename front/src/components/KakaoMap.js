@@ -10,6 +10,7 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
   const [infowindow, setInfowindow] = useState();
   const [zoom, setZoom] = useState(13);
   const [target, setTarget] = useState();
+  const [hoverInfo, setHoverInfo] = useState()
 
   const container = useRef();
 
@@ -126,13 +127,25 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
       // 지역명을 표시하는 커스텀오버레이를 지도위에 표시합니다
       kakao.maps.event.addListener(polygon, "mouseover", function (mouseEvent) {
         if (target) {
+          const indications = {
+            0: '의사 수',
+            1: '의료 수급권자 수',
+            2: '대학병원 수',
+            3: '구급차 수'
+          }
+
           console.log(
             target[subValue].filter((data) => data.name === area.name)[0]
           );
+
           customOverlay.setContent(`
         <div class="area">
-          ${target[subValue].filter((data) => data.name === area.name)[0].hover}
+          \"${target[subValue].filter((data) => data.name === area.name)[0].name}\"의 
+          \"${indications[subValue]}\" 지표는
+          전국 평균 점수(0점) 대비 ${target[subValue].filter((data) => data.name === area.name)[0].hover}점 입니다.
         </div>`);
+          customOverlay.setPosition(mouseEvent.latLng);
+          customOverlay.setMap(kakaoMap);
         } else {
           polygon.setOptions({ fillColor: "rgba(100,200,38, 0.7)" });
           customOverlay.setContent(`<div class="area">${area.name}</div>`);
