@@ -21,14 +21,6 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
   }, [mainValue]);
 
   useEffect(() => {
-    console.log(mainValue, subValue);
-  }, [mainValue, subValue]);
-
-  useEffect(() => {
-    console.log(target, polygons);
-  }, [target, polygons]);
-
-  useEffect(() => {
     setMap();
   }, []);
 
@@ -78,6 +70,39 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
   //다각형 생성함수
   const displayArea = useCallback(
     (area) => {
+      //get함수 정의
+      function getName() {
+        if (!target) return area.name;
+        const { name } = target[subValue].filter(
+          (data) => data.name === area.name
+        )[0];
+
+        return name;
+      }
+      function getHover() {
+        const { hover } = target[subValue].filter(
+          (data) => data.name === area.name
+        )[0];
+
+        return hover;
+      }
+      function getScore() {
+        if (!target) return 0.7;
+        const { score } = target[subValue].filter(
+          (data) => data.name === area.name
+        )[0];
+
+        return score;
+      }
+
+      function getColor(score) {
+        if (score > 50) {
+          return "#00A500";
+        } else {
+          return "#FF2424";
+        }
+      }
+
       // 다각형을 생성합니다
       let polygon = new kakao.maps.Polygon({
         map: kakaoMap,
@@ -89,9 +114,18 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
         fillOpacity: 0.7,
       });
 
+      if (target) {
+        polygon.setOptions({
+          fillOpacity: getScore() / 100,
+          fillColor: getColor(getScore()),
+        });
+      }
+
       // 다각형에 mouseover 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 변경합니다
       // 지역명을 표시하는 커스텀오버레이를 지도위에 표시합니다
       kakao.maps.event.addListener(polygon, "mouseover", function (mouseEvent) {
+        let content = `<div class="area">${getName()}</div>`;
+
         if (target) {
           const indications = {
             0: "의사 수",
@@ -99,21 +133,15 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
             2: "대학병원 수",
             3: "구급차 수",
           };
-
-          const { name, hover } = target[subValue].filter(
-            (data) => data.name === area.name
-          )[0];
-
-          customOverlay.setContent(`
-        <div class="area">
-          "${name}"의 
-          "${indications[subValue]}" 지표는<br/>
-          전국 평균 점수(0점) 대비 ${hover}점 입니다.
-        </div>`);
-        } else {
-          customOverlay.setContent(`<div class="area">${area.name}</div>`);
+          content = `
+          <div class="area">
+            "${getName()}"의 
+            "${indications[subValue]}" 지표는<br/>
+            전국 평균 점수(0점) 대비 ${getHover()}점 입니다.
+          </div>`;
         }
-        polygon.setOptions({ fillColor: "rgba(100,200,38, 0.7)" });
+        customOverlay.setContent(content);
+        polygon.setOptions({ fillOpacity: 1 });
         customOverlay.setPosition(mouseEvent.latLng);
         customOverlay.setMap(kakaoMap);
       });
@@ -126,7 +154,10 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
       // 다각형에 mouseout 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 원래색으로 변경합니다
       // 커스텀 오버레이를 지도에서 제거합니다
       kakao.maps.event.addListener(polygon, "mouseout", function () {
-        polygon.setOptions({ fillColor: "#fff" });
+        console.log(getScore());
+        polygon.setOptions({
+          fillOpacity: getScore() === 0.7 ? 0.7 : getScore() / 100,
+        });
         customOverlay.setMap(null);
       });
 
