@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../styles/polygon.scss";
 import * as api from "../api";
+import { connect } from "react-redux";
 
 const KakaoMap = ({ locations, mainValue, subValue }) => {
   const [isloaded, setIsloaded] = useState(false);
@@ -10,23 +11,16 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
   const [infowindow, setInfowindow] = useState();
   const [zoom, setZoom] = useState(13);
   const [target, setTarget] = useState();
+  const [polygons, setPolygons] = useState([]);
 
   const container = useRef();
 
+  console.log("kakaoMap");
   useEffect(() => {
     if (mainValue === "target") {
       getApi();
     }
   }, [mainValue]);
-
-  useEffect(() => {
-    console.log(mainValue);
-    console.log(subValue);
-  }, [mainValue, subValue]);
-
-  useEffect(() => {
-    console.log(target);
-  }, [target]);
 
   useEffect(() => {
     setMap();
@@ -39,18 +33,12 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
 
   useEffect(() => {
     if (isloaded) {
-      if (target) {
-        locations.forEach((location) => displayArea(location, subValue));
-        return;
-      }
-      locations.forEach((location) => displayArea(location));
+      polygons.map((polygon) => polygon.setMap(null));
+      setPolygons([]);
+      const newPolygons = locations.map((location) => displayArea(location));
+      setPolygons((prevPolygons) => prevPolygons.concat(newPolygons));
     }
-  }, [isloaded, subValue]);
-
-  useEffect(() => {
-    zoomChange();
-    test();
-  }, [kakaoMap]);
+  }, [isloaded, mainValue, subValue]);
 
   async function getApi() {
     const result = await api.getTargets();
@@ -81,40 +69,48 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
     setKakaoMap(map);
   }, []);
 
-  //줌 변경때마다 실행
-  const zoomChange = useCallback(() => {
-    if (kakaoMap === null) {
-      return;
-    }
-    kakao.maps.event.addListener(kakaoMap, "zoom_changed", function () {
-      // 지도의 현재 레벨을 얻어옵니다
-      let level = kakaoMap.getLevel();
-
-      console.log(level);
-    });
-  }, [kakaoMap]);
-
-  //테스트함수
-  const test = useCallback(() => {
-    if (kakaoMap === null) {
-      return;
-    }
-    kakao.maps.event.addListener(kakaoMap, "dblclick", function (mouseEvent) {
-      console.log("더블클릭");
-    });
-  }, [kakaoMap]);
-
   //다각형 생성함수
   const displayArea = useCallback(
     (area) => {
-      // 다각형을 생성합니다
-      if (target) {
-        console.log(
-          target[subValue].filter((data) => data.name === area.name)[0]
-        );
+      //get함수 정의
+      function getName() {
+        if (!target) return area.name;
+        const { name } = target[subValue].filter(
+          (data) => data.name === area.name
+        )[0];
+
+        return name;
       }
-      var polygon = new kakao.maps.Polygon({
-        map: kakaoMap, // 다각형을 표시할 지도 객체
+      function getHover() {
+        const { hover } = target[subValue].filter(
+          (data) => data.name === area.name
+        )[0];
+
+        return hover;
+      }
+      function getScore() {
+        if (!target) return 0.7;
+        let { score } = target[subValue].filter(
+          (data) => data.name === area.name
+        )[0];
+        if (score < 50) {
+          score = 50 - score;
+        }
+
+        return score;
+      }
+
+      function getColor(score) {
+        if (score > 50) {
+          return "#00A500";
+        } else {
+          return "#FF2424";
+        }
+      }
+
+      // 다각형을 생성합니다
+      let polygon = new kakao.maps.Polygon({
+        map: kakaoMap,
         path: area.path,
         strokeWeight: 2,
         strokeColor: "#004c80",
@@ -122,23 +118,38 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
         fillColor: "#fff",
         fillOpacity: 0.7,
       });
+
+      //target에 데이터를 받아오면
+      if (target) {
+        polygon.setOptions({
+          fillOpacity: getScore() / 100,
+          fillColor: getColor(getScore()),
+        });
+      }
+
       // 다각형에 mouseover 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 변경합니다
       // 지역명을 표시하는 커스텀오버레이를 지도위에 표시합니다
       kakao.maps.event.addListener(polygon, "mouseover", function (mouseEvent) {
+        let content = `<div class="area">${getName()}</div>`;
+
         if (target) {
-          console.log(
-            target[subValue].filter((data) => data.name === area.name)[0]
-          );
-          customOverlay.setContent(`
-        <div class="area">
-          ${target[subValue].filter((data) => data.name === area.name)[0].hover}
-        </div>`);
-        } else {
-          polygon.setOptions({ fillColor: "rgba(100,200,38, 0.7)" });
-          customOverlay.setContent(`<div class="area">${area.name}</div>`);
-          customOverlay.setPosition(mouseEvent.latLng);
-          customOverlay.setMap(kakaoMap);
+          const indications = {
+            0: "의사 수",
+            1: "의료 수급권자 수",
+            2: "대학병원 수",
+            3: "구급차 수",
+          };
+          content = `
+          <div class="area">
+            "<b>${getName()}</b>"의 
+            "<b>${indications[subValue]}</b>" 지표는<br/>
+            전국 평균 점수(0점) 대비 <b>${getHover()}점</b> 입니다.
+          </div>`;
         }
+        customOverlay.setContent(content);
+        polygon.setOptions({ fillOpacity: 1 });
+        customOverlay.setPosition(mouseEvent.latLng);
+        customOverlay.setMap(kakaoMap);
       });
 
       // 다각형에 mousemove 이벤트를 등록하고 이벤트가 발생하면 커스텀 오버레이의 위치를 변경합니다
@@ -149,31 +160,23 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
       // 다각형에 mouseout 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 원래색으로 변경합니다
       // 커스텀 오버레이를 지도에서 제거합니다
       kakao.maps.event.addListener(polygon, "mouseout", function () {
-        polygon.setOptions({ fillColor: "#fff" });
+        polygon.setOptions({
+          fillOpacity: getScore() === 0.7 ? 0.7 : getScore() / 100,
+        });
         customOverlay.setMap(null);
       });
 
-      // 다각형에 click 이벤트를 등록하고 이벤트가 발생하면 다각형의 이름과 면적을 인포윈도우에 표시합니다
-      kakao.maps.event.addListener(polygon, "click", function (mouseEvent) {
-        // let content = `
-        // <div class="info">
-        //   <div class="title">
-        //   ${area.name}</div><div class="size">총 면적 : 약 ${Math.floor(
-        //   polygon.getArea()
-        // )}m<sup>2</sup>
-        //   </div>`;
-
-        // infowindow.setContent(content);
-        // infowindow.setPosition(mouseEvent.latLng);
-        // infowindow.setMap(kakaoMap);
-
-        kakaoMap.setLevel(9);
-      });
+      return polygon;
     },
-    [kakaoMap, customOverlay, infowindow, subValue]
+    [kakaoMap, customOverlay, infowindow, subValue, mainValue, target]
   );
 
   return <div ref={container} style={{ width: "100%", height: "70vh" }} />;
 };
 
-export default KakaoMap;
+const mapStateToProps = (state) => ({
+  //state는 현재 스토어가 지니고 있는 상태
+  mainValue: state.change.mainValue,
+  subValue: state.change.subValue,
+});
+export default connect(mapStateToProps)(KakaoMap);
