@@ -1,4 +1,5 @@
 .area {
+  display: block;
   position: absolute;
   background: #fff;
   border: 1px solid #888;
@@ -7,6 +8,8 @@
   top: -5px;
   left: 15px;
   padding: 2px;
+  width: auto;
+  height: auto;
 }
 
 .info {
