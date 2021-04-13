@@ -28,8 +28,8 @@ function MainButton({ mainChange, subChange }) {
   ];
   const targetData = [
     { id: 0, name: "의사 수", describe: "의사 수 설명" },
-    { id: 1, name: "의료 수급권자 수", describe: "수급권자 수 설명" },
-    { id: 2, name: "대학병원 수", describe: "대학병원 수 설명" },
+    { id: 1, name: "진료건 수", describe: "진료 수 설명" },
+    { id: 2, name: "병원 수", describe: "병원 수 설명" },
     { id: 3, name: "구급차 수", describe: "구급차 수 설명" },
   ];
 
