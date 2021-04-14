@@ -1,5 +1,6 @@
 /* global kakao */
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
 import "../styles/polygon.css";
 import * as api from "../api";
 import { connect } from "react-redux";
@@ -14,6 +15,7 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
   const [polygons, setPolygons] = useState([]);
 
   const container = useRef();
+  const history = useHistory();
 
   console.log("kakaoMap");
 
@@ -144,7 +146,8 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
           <div class="area">
             "<b>${getName()}</b>"의 
             "<b>${indications[subValue]}</b>" 지표는<br/>
-            전국 평균 점수(0점) 대비 <b>${getHover()}점</b> 입니다.
+            전국 평균 점수(0점) 대비 <b>${getHover()}점</b> 입니다.<br/>
+            클릭시 상세보기
           </div>`;
         }
         customOverlay.setContent(content);
@@ -165,6 +168,12 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
           fillOpacity: getScore() === 0.7 ? 0.7 : getScore() / 100,
         });
         customOverlay.setMap(null);
+      });
+
+      kakao.maps.event.addListener(polygon, "click", function (mouseEvent) {
+        console.log("click", mouseEvent);
+        console.log(history);
+        history.push({ pathname: "/details", state: { name: area.name } });
       });
 
       return polygon;
