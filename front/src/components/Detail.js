@@ -1,35 +1,30 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-
-import {
-  ComposedChart,
-  Line,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+import DeatilGraph from "./DeatilGraph";
 
 const ButtonContainer = styled.div`
   display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
 `;
 
 const MainContainer = styled.div`
+  padding: 1rem;
+  border: 1px solid lightgray;
   display: flex;
+  flex-direction: column;
   margin-top: 2rem;
-  width: 100%;
-  height: 100%;
+  width: inherit;
+  height: inherit;
+  background-color: #dcdcdc;
 `;
 
 const MainContent = styled.div`
-  flex: 1;
-  border: 1px solid lightgray;
-  height: 50vw;
+  width: 100%;
+  height: 50vh;
+  background-color: white;
 `;
 
 const SubContainer = styled.div`
@@ -38,42 +33,50 @@ const SubContainer = styled.div`
 `;
 
 const SubContent = styled.div`
-  flex: 1;
   border: 1px solid lightgray;
   margin-bottom: 2rem;
 `;
 
 function Detail({ name, data }) {
   const history = useHistory();
+  console.log(data);
+
   return (
-    <div style={{ padding: "2rem", width: "100%", height: "100%" }}>
+    <div style={{ padding: "2rem" }}>
       <Typography variant="h3">{name}</Typography>
       <MainContainer>
+        <ButtonContainer>
+          <Button
+            color="primary"
+            variant="contained"
+            style={{ marginRight: "5px" }}
+          >
+            의사 수
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            style={{ marginRight: "5px" }}
+          >
+            병원 수
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            style={{ marginRight: "5px" }}
+          >
+            응급시설 수
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            style={{ marginRight: "5px" }}
+          >
+            진료횟수
+          </Button>
+        </ButtonContainer>
         <MainContent>
-          {data && (
-            <ComposedChart
-              width={500}
-              height={400}
-              data={data}
-              margin={{
-                top: 20,
-                right: 20,
-                bottom: 20,
-                left: 20,
-              }}
-            >
-              {console.log(data)}
-              <CartesianGrid stroke="#f5f5f5" />
-              <XAxis dataKey="name" scale="band" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="metro" barSize={20} fill="#413ea0" />
-              <Line type="monotone" dataKey="metro_avg" stroke="#ff7300" />
-              <Bar dataKey="suburb" barSize={20} fill="#413ea0" />
-              <Line type="monotone" dataKey="suburb_avg" stroke="#ff7300" />
-            </ComposedChart>
-          )}
+          <DeatilGraph data={data} />
         </MainContent>
       </MainContainer>
       <SubContainer>

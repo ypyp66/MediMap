@@ -1,12 +1,11 @@
 import React from "react";
 import Detail from "../components/Detail";
-import * as data from "../data/ambul_medic_detail";
+import data from "../data/ambul_medic_detail.json";
 
 function DetailContainer({ location }) {
   const { name } = location.state;
 
-  console.log(data.ambul);
-  return <Detail name={name} data={data.ambul} />;
+  return <Detail name={name} data={data} />;
 }
 
 export default DetailContainer;
