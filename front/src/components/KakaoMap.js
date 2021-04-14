@@ -1,9 +1,10 @@
 /* global kakao */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../styles/polygon.css";
-import "../styles/overlay.css"
+import "../styles/overlay.css";
 import * as api from "../api";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 const KakaoMap = ({ locations, mainValue, subValue }) => {
   const [isloaded, setIsloaded] = useState(false);
@@ -15,7 +16,7 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
   const [polygons, setPolygons] = useState([]);
 
   const container = useRef();
-
+  const history = useHistory();
   console.log("kakaoMap");
 
   useEffect(() => {
@@ -133,7 +134,6 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
       // 지역명을 표시하는 커스텀오버레이를 지도위에 표시합니다
       kakao.maps.event.addListener(polygon, "mouseover", function (mouseEvent) {
         let content = `<div class="area">${getName()}</div>`;
-        let orderByHoverDesc = target[subValue].sort((a, b) => b.hover - a.hover).slice(0, 4);
 
         if (target) {
           const indications = {
@@ -142,23 +142,26 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
             2: "병원 수",
             3: "구급차 수",
           };
-          content = 
-    '      <div class="overlaybox">' +
-    `        <div class="boxtitle">${indications[subValue]}</div>` +
-    '        <div class="first">' +
-    `          <div class="triangle text">${getHover()}</div>` +
-    `          <div class="indication text">${getName()}</div>` +
-    '        </div>' +
-    '       <ul>' + orderByHoverDesc.map((i, index) => 
-    (
-    '         <li>' +
-    `           <span class = 'number'>${index + 1}</span>` +
-    `           <span class = 'title'>${i.name}</span>` +
-    `           <span class = 'count '>${i.hover}</span>` +
-    '         </li>'
-    )
-    ) +           
-    '       </ul>'
+          let orderByHoverDesc = target[subValue]
+            .sort((a, b) => b.hover - a.hover)
+            .slice(0, 4);
+          content = `
+          <div class="overlaybox">
+            <div class="boxtitle">${indications[subValue]}</div>
+            <div class="first">
+              <div class="triangle text">${getHover()}</div>
+              <div class="indication text">${getName()}</div>
+            </div>
+           <ul>
+           ${orderByHoverDesc.map(
+             (i, index) =>
+               `<li>
+               <span class="number">${index + 1}</span>
+               <span class="title">${i.name}</span>
+               <span class="count ">${i.hover}</span>
+             </li>`
+           )}
+           </ul>`;
         }
         customOverlay.setContent(content);
         polygon.setOptions({ fillOpacity: 1 });
@@ -178,6 +181,13 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
           fillOpacity: getScore() === 0.7 ? 0.7 : getScore() / 100,
         });
         customOverlay.setMap(null);
+      });
+
+      kakao.maps.event.addListener(polygon, "click", function () {
+        history.push({
+          pathname: "/details",
+          state: { name: area.name },
+        });
       });
 
       return polygon;

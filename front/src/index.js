@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { BrowserRouter } from "react-router-dom";
 
 const theme = createMuiTheme({
   typography: {
@@ -27,7 +28,9 @@ const theme = createMuiTheme({
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </ThemeProvider>,
   document.getElementById("root")
 );
