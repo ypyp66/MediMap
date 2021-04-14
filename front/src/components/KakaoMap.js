@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import "../styles/polygon.css";
+import "../styles/overlay.css";
 import * as api from "../api";
 import { connect } from "react-redux";
 
@@ -16,7 +17,6 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
 
   const container = useRef();
   const history = useHistory();
-
   console.log("kakaoMap");
 
   useEffect(() => {
@@ -138,27 +138,40 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
         if (target) {
           const indications = {
             0: "의사 수",
-            1: "의료 수급권자 수",
-            2: "대학병원 수",
+            1: "진료건 수",
+            2: "병원 수",
             3: "구급차 수",
           };
+          let orderByHoverDesc = target[subValue]
+            .sort((a, b) => b.hover - a.hover)
+            .slice(0, 4);
           content = `
-          <div class="area">
-            "<b>${getName()}</b>"의 
-            "<b>${indications[subValue]}</b>" 지표는<br/>
-            전국 평균 점수(0점) 대비 <b>${getHover()}점</b> 입니다.<br/>
-            클릭시 상세보기
-          </div>`;
+          <div class="overlaybox">
+            <div class="boxtitle">${indications[subValue]}</div>
+            <div class="first">
+              <div class="triangle text">${getHover()}</div>
+              <div class="indication text">${getName()}</div>
+            </div>
+           <ul>
+           ${orderByHoverDesc.map(
+             (i, index) =>
+               `<li>
+               <span class="number">${index + 1}</span>
+               <span class="title">${i.name}</span>
+               <span class="count ">${i.hover}</span>
+             </li>`
+           )}
+           </ul>`;
         }
         customOverlay.setContent(content);
         polygon.setOptions({ fillOpacity: 1 });
-        customOverlay.setPosition(mouseEvent.latLng);
+        customOverlay.setPosition(new kakao.maps.LatLng(37, 133.5));
         customOverlay.setMap(kakaoMap);
       });
 
       // 다각형에 mousemove 이벤트를 등록하고 이벤트가 발생하면 커스텀 오버레이의 위치를 변경합니다
       kakao.maps.event.addListener(polygon, "mousemove", function (mouseEvent) {
-        customOverlay.setPosition(mouseEvent.latLng);
+        customOverlay.setPosition(new kakao.maps.LatLng(37, 133.5));
       });
 
       // 다각형에 mouseout 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 원래색으로 변경합니다
@@ -170,10 +183,11 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
         customOverlay.setMap(null);
       });
 
-      kakao.maps.event.addListener(polygon, "click", function (mouseEvent) {
-        console.log("click", mouseEvent);
-        console.log(history);
-        history.push({ pathname: "/details", state: { name: area.name } });
+      kakao.maps.event.addListener(polygon, "click", function () {
+        history.push({
+          pathname: "/details",
+          state: { name: area.name },
+        });
       });
 
       return polygon;

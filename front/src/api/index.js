@@ -7,7 +7,7 @@ const getDiagnosis = () => axios.get("/diagnosis");
 
 export const getTargets = () =>
   axios
-    .all([getDoctors(), getHospitals(), getAmbulMedics(), getDiagnosis()])
+    .all([getDoctors(), getDiagnosis() , getHospitals(), getAmbulMedics()])
     .then(
       axios.spread((res1, res2, res3, res4) => [
         [...res1.data],

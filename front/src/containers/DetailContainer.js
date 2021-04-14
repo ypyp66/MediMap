@@ -1,13 +1,11 @@
 import React from "react";
 import Detail from "../components/Detail";
-import ambul_medic_detail from "../data/ambul_medic_detail.json";
-import { useLocation } from "react-router-dom";
+import data from "../data/ambul_medic_detail.json";
 
-function DetailContainer() {
-  const location = useLocation();
+function DetailContainer({ location }) {
+  const { name } = location.state;
 
-  console.log(location);
-  return <Detail data={ambul_medic_detail} />;
+  return <Detail name={name} data={data} />;
 }
 
 export default DetailContainer;

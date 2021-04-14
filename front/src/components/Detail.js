@@ -1,115 +1,99 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button, Typography } from "@material-ui/core";
-import { useLocation, useHistory } from "react-router-dom";
-import {
-  ComposedChart,
-  Line,
-  Area,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
-
-const Outer = styled.div`
-  padding: 2rem;
-`;
+import { useHistory } from "react-router-dom";
+import DeatilGraph from "./DeatilGraph";
 
 const ButtonContainer = styled.div`
   display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
 `;
+
 const MainContainer = styled.div`
+  padding: 1rem;
+  border: 1px solid lightgray;
+  border-radius: 10px;
   display: flex;
-  margin-bottom: 2rem;
+  flex-direction: column;
   margin-top: 2rem;
+  width: inherit;
+  height: inherit;
+  background-color: #dcdcdc;
 `;
 
 const MainContent = styled.div`
-  flex: 1;
-  border: 1px solid lightgray;
-  width: 50vw;
+  width: 100%;
   height: 50vh;
-  margin-right: 1rem;
+  background-color: white;
 `;
 
-const SubDetail = styled.div`
+const SubContainer = styled.div`
   display: flex;
+  margin-top: 2rem;
+`;
+
+const SubContent = styled.div`
   border: 1px solid lightgray;
   margin-bottom: 2rem;
 `;
 
-function Detail({ data }) {
-  const location = useLocation();
+function Detail({ name, data }) {
   const history = useHistory();
+  console.log(data);
 
-  console.log(location, data);
   return (
-    <Outer>
-      <Typography variant="h3">{location.state.name}</Typography>
+    <div style={{ padding: "2rem" }}>
+      <Typography variant="h3">{name}</Typography>
       <MainContainer>
+        <ButtonContainer>
+          <Button
+            color="primary"
+            variant="contained"
+            style={{ marginRight: "5px" }}
+          >
+            의사 수
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            style={{ marginRight: "5px" }}
+          >
+            병원 수
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            style={{ marginRight: "5px" }}
+          >
+            응급시설 수
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            style={{ marginRight: "5px" }}
+          >
+            진료횟수
+          </Button>
+        </ButtonContainer>
         <MainContent>
-          <ResponsiveContainer>
-            <ComposedChart
-              width={500}
-              height={400}
-              data={data}
-              margin={{
-                top: 20,
-                right: 20,
-                bottom: 20,
-                left: 20,
-              }}
-            >
-              <CartesianGrid stroke="#f5f5f5" />
-              <XAxis dataKey="name" scale="band" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="metro" barSize={20} fill="#413ea0" />
-              <Line type="monotone" dataKey="uv" stroke="#ff7300" />
-            </ComposedChart>
-          </ResponsiveContainer>
-        </MainContent>
-        <MainContent>
-          <ResponsiveContainer>
-            <ComposedChart
-              width={500}
-              height={400}
-              data={data}
-              margin={{
-                top: 20,
-                right: 20,
-                bottom: 20,
-                left: 20,
-              }}
-            >
-              <CartesianGrid stroke="#f5f5f5" />
-              <XAxis dataKey="name" scale="band" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="uv" barSize={20} fill="#413ea0" />
-              <Line type="monotone" dataKey="uv" stroke="#ff7300" />
-            </ComposedChart>
-          </ResponsiveContainer>
+          <DeatilGraph data={data} />
         </MainContent>
       </MainContainer>
-      <SubDetail>sub</SubDetail>
+      <SubContainer>
+        <SubContent>sub</SubContent>
+      </SubContainer>
       <Button
         fullWidth
-        variant="contained"
         color="secondary"
+        variant="contained"
         onClick={() => {
           history.push({ pathname: "/" });
         }}
       >
         뒤로가기
       </Button>
-    </Outer>
+    </div>
   );
 }
 

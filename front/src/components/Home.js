@@ -1,4 +1,3 @@
-import React from "react";
 import { Container, Typography, Toolbar } from "@material-ui/core";
 import LocalHospitalIcon from "@material-ui/icons/LocalHospital";
 import MapContainer from "../containers/MapContainer";

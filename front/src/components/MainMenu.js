@@ -27,10 +27,10 @@ function MainButton({ mainChange, subChange }) {
     { id: 2, name: "심장질환" },
   ];
   const targetData = [
-    { id: 0, name: "의사 수", describe: "의사 수 설명" },
-    { id: 1, name: "의료 수급권자 수", describe: "수급권자 수 설명" },
-    { id: 2, name: "대학병원 수", describe: "대학병원 수 설명" },
-    { id: 3, name: "구급차 수", describe: "구급차 수 설명" },
+    { id: 0, name: "의사 수", description: "의사 수 설명" },
+    { id: 1, name: "진료건 수", description: "진료 수 설명" },
+    { id: 2, name: "병원 수", description: "병원 수 설명" },
+    { id: 3, name: "구급차 수", description: "구급차 수 설명" },
   ];
 
   const useStyles = makeStyles((theme) => ({
@@ -116,7 +116,7 @@ function MainButton({ mainChange, subChange }) {
               >
                 {data.name}
               </Button>
-              <p className="sub_menu">{data.describe}</p>
+              <p className="sub_menu">{data.description}</p>
             </div>
           ))}
       </DataContainer>
