@@ -32,7 +32,7 @@ function Deatil_Graph_For_Sub({ data, domain}) {
         <Tooltip />
         <Legend />
         <Bar dataKey="metro" barSize={20} fill="#413ea0" />
-        <Bar dataKey="suburb" barSize={20} fill="#07a281" />
+        <Bar dataKey="subrub" barSize={20} fill="#07a281" />
       </ComposedChart>
     </ResponsiveContainer>
   );

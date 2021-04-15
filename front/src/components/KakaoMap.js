@@ -15,6 +15,7 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
   const [infowindow, setInfowindow] = useState();
   const [target, setTarget] = useState();
   const [polygons, setPolygons] = useState([]);
+  const [detailData, setDetailData] = useState();
 
   const container = useRef();
   const history = useHistory();
@@ -46,7 +47,9 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
 
   async function getApi() {
     const result = await api.getTargets();
+    const detail = await api.getDetails();
     setTarget(result);
+    setDetailData(detail);
   }
 
   const setPath = useCallback(() => {
@@ -197,7 +200,8 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
           pathname: "/details",
           state: { 
             name: area.name,
-            indication: subValue
+            indication: subValue,
+            data: detailData
           },
         });
       });

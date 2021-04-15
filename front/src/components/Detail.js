@@ -84,8 +84,8 @@ function Detail({ name, data, indication }) {
         if (!(data.type in dataOrderByType)) {
           dataOrderByType.push({
             name: data.type,
-            metro: data.metro,
-            suburb: data.suburb,
+            metro: data.시,
+            suburb: data.도,
           });
         }
       });

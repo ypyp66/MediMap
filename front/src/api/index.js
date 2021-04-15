@@ -16,3 +16,9 @@ export const getTargets = () =>
         [...res4.data],
       ])
     );
+
+export const getDetails = () =>
+      axios.get("/detail")
+      .then(
+        response => response.data
+      )

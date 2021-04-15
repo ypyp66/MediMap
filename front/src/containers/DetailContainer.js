@@ -7,6 +7,7 @@ const data = axios.get("/detail").then(response => response.data)
 function DetailContainer({ location }) {
   const { name } = location.state;
   const { indication } = location.state;
+  const { data } = location.state;
 
   return <Detail name={name} data={data} indication = {indication} />;
 }
