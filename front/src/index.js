@@ -8,7 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 
 const theme = createMuiTheme({
   typography: {
-    fontFamily: '"Recursive","Noto Sans KR", sans-serif',
+    fontFamily: 'Nanum Gothic Coding,"Recursive","Noto Sans KR", sans-serif',
   },
   palette: {
     primary: {

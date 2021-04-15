@@ -1,13 +1,12 @@
 import React, { PureComponent, useEffect, useState } from "react";
 import styled from "styled-components";
-import { Button, Typography } from "@material-ui/core";
+import { Button, Typography, Grid } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import DeatilGraph from "./DeatilGraph";
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 1rem;
 `;
 
 const MainContainer = styled.div`
@@ -18,14 +17,15 @@ const MainContainer = styled.div`
   flex-direction: column;
   margin-top: 2rem;
   width: inherit;
-  height: inherit;
   background-color: #dcdcdc;
+  font-family: "Nanum Gothic Coding";
 `;
 
 const MainContent = styled.div`
-  width: 100%;
-  height: 50vh;
-  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
 `;
 
 const SubContainer = styled.div`
@@ -39,46 +39,100 @@ const SubContent = styled.div`
 `;
 
 function Detail({ name, data }) {
+  const [allLocation, setAllLocation] = useState([]);
+  const [btnIdx, setBtnIdx] = useState(0); //버튼인덱스
+
   const history = useHistory();
-  console.log(data);
+
+  const indicator = {
+    0: "의사 1인당 인구수",
+    1: "병원 1개당 인구수",
+    2: "응급시설(구급차, 의료인력)당 인구수",
+    3: "진료받는 인구 비율",
+  };
+
+  useEffect(() => {
+    //그래프 갯수 설정
+    let arr = [];
+    for (let i = 0; i < data[btnIdx].length; i += 17) {
+      arr.push(data[btnIdx].slice(i, i + 17));
+    }
+    setAllLocation(arr);
+  }, [btnIdx, data]);
+
+  useEffect(() => {
+    console.log(allLocation);
+  }, [allLocation]);
+
+  const handleClick = (e) => {
+    console.log(e.currentTarget.value);
+    setBtnIdx(parseInt(e.currentTarget.value));
+  };
 
   return (
     <div style={{ padding: "2rem" }}>
       <Typography variant="h3">{name}</Typography>
       <MainContainer>
-        <ButtonContainer>
-          <Button
-            color="primary"
-            variant="contained"
-            style={{ marginRight: "5px" }}
-          >
-            의사 수
-          </Button>
-          <Button
-            color="primary"
-            variant="contained"
-            style={{ marginRight: "5px" }}
-          >
-            병원 수
-          </Button>
-          <Button
-            color="primary"
-            variant="contained"
-            style={{ marginRight: "5px" }}
-          >
-            응급시설 수
-          </Button>
-          <Button
-            color="primary"
-            variant="contained"
-            style={{ marginRight: "5px" }}
-          >
-            진료횟수
-          </Button>
-        </ButtonContainer>
         <MainContent>
-          <DeatilGraph data={data} />
+          <Typography variant="h6">{indicator[btnIdx]}</Typography>
+          <ButtonContainer>
+            <Button
+              color="primary"
+              variant="contained"
+              value="0"
+              style={{ marginRight: "5px" }}
+              onClick={handleClick}
+            >
+              의사 수
+            </Button>
+            <Button
+              color="primary"
+              variant="contained"
+              value="1"
+              style={{ marginRight: "5px" }}
+              onClick={handleClick}
+            >
+              병원 수
+            </Button>
+            <Button
+              color="primary"
+              variant="contained"
+              value="2"
+              style={{ marginRight: "5px" }}
+              onClick={handleClick}
+            >
+              응급시설 수
+            </Button>
+            <Button
+              color="primary"
+              variant="contained"
+              value="3"
+              style={{ marginRight: "5px" }}
+              onClick={handleClick}
+            >
+              진료횟수
+            </Button>
+          </ButtonContainer>
         </MainContent>
+        <Grid container spacing={3}>
+          {allLocation.map((location, index) => (
+            <Grid
+              item
+              xs
+              style={{
+                height: "30vh",
+                background: "white",
+                paddingBottom: "3rem",
+                margin: "1rem",
+              }}
+            >
+              <Typography variant="h6">
+                {location[0].type && location[0].type}
+              </Typography>
+              <DeatilGraph key={btnIdx + index} data={location} />
+            </Grid>
+          ))}
+        </Grid>
       </MainContainer>
       <SubContainer>
         <SubContent>sub</SubContent>

@@ -1,17 +1,17 @@
 /* global kakao */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
-import "../styles/polygon.css";
-import "../styles/overlay.css";
 import * as api from "../api";
 import { connect } from "react-redux";
+
+import "../styles/polygon.css";
+import "../styles/overlay.scss";
 
 const KakaoMap = ({ locations, mainValue, subValue }) => {
   const [isloaded, setIsloaded] = useState(false);
   const [kakaoMap, setKakaoMap] = useState(null);
   const [customOverlay, setCustomOverlay] = useState();
   const [infowindow, setInfowindow] = useState();
-  const [zoom, setZoom] = useState(13);
   const [target, setTarget] = useState();
   const [polygons, setPolygons] = useState([]);
 
@@ -60,10 +60,10 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
 
   //맵그리기
   const setMap = useCallback(() => {
-    const center = new kakao.maps.LatLng(35.70470854748703, 128.31587736025025);
+    const center = new kakao.maps.LatLng(35.70470854748703, 128.49987736025025);
     const options = {
       center,
-      level: zoom,
+      level: 13,
     };
     const map = new kakao.maps.Map(container.current, options);
     setCustomOverlay(new kakao.maps.CustomOverlay({}));
@@ -142,36 +142,44 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
             2: "병원 수",
             3: "구급차 수",
           };
-          let orderByHoverDesc = target[subValue]
+          const orderByHoverDesc = target[subValue]
             .sort((a, b) => b.hover - a.hover)
             .slice(0, 4);
+
           content = `
           <div class="overlaybox">
             <div class="boxtitle">${indications[subValue]}</div>
-            <div class="first">
-              <div class="triangle text">${getHover()}</div>
-              <div class="indication text">${getName()}</div>
-            </div>
-           <ul>
-           ${orderByHoverDesc.map(
-             (i, index) =>
-               `<li>
-               <span class="number">${index + 1}</span>
-               <span class="title">${i.name}</span>
-               <span class="count ">${i.hover}</span>
-             </li>`
-           )}
-           </ul>`;
+            <div class="score">${getName()} (${getHover()}점)</div>
+            <ul class="rankList">
+              <h4 class="rankTitle">순위</h4>
+              ${orderByHoverDesc.map(
+                (i, index) =>
+                  `<li class="rankItem">
+                  <h5 class="item_number">${index + 1}.</h5>
+                  <div class="item_title">${i.name}</div>
+                  <div class="item_score">${i.hover}</div>
+                </li>`
+              )}
+            </ul>
+           </div>`;
         }
         customOverlay.setContent(content);
         polygon.setOptions({ fillOpacity: 1 });
-        customOverlay.setPosition(new kakao.maps.LatLng(37, 133.5));
+        customOverlay.setPosition(
+          target
+            ? new kakao.maps.LatLng(38.7083852, 129.6650533)
+            : mouseEvent.latLng
+        );
         customOverlay.setMap(kakaoMap);
       });
 
       // 다각형에 mousemove 이벤트를 등록하고 이벤트가 발생하면 커스텀 오버레이의 위치를 변경합니다
       kakao.maps.event.addListener(polygon, "mousemove", function (mouseEvent) {
-        customOverlay.setPosition(new kakao.maps.LatLng(37, 133.5));
+        customOverlay.setPosition(
+          target
+            ? new kakao.maps.LatLng(38.7083852, 129.6650533)
+            : mouseEvent.latLng
+        );
       });
 
       // 다각형에 mouseout 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 원래색으로 변경합니다

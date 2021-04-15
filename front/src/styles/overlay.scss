@@ -1,0 +1,52 @@
+.overlaybox {
+  position: relative;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 15px 10px;
+  top: 200px;
+  left: 100px;
+  border-radius: 5px;
+}
+.overlaybox li {
+  list-style: none;
+}
+.boxtitle {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+.score {
+  margin-bottom: 8px;
+}
+
+.rankList {
+  width: inherit;
+  margin: 0;
+  padding: 0;
+}
+.rankTitle {
+  margin: 5px 0 0 0;
+  margin-bottom: 15px;
+}
+
+.rankList li {
+  position: relative;
+  background: #2b2d36;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  color: whitesmoke;
+  justify-content: start;
+  margin-top: -10px;
+}
+
+.rankItem {
+  font-size: 16px;
+}
+.item_number {
+  margin: 0;
+}
+.item_title {
+  margin-left: 6px;
+  margin-right: 6px;
+}

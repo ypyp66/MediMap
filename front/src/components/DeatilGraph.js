@@ -1,5 +1,4 @@
 import React from "react";
-
 import {
   ComposedChart,
   Line,
@@ -10,7 +9,6 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  BarChart,
 } from "recharts";
 
 function Deatil_Graph({ data }) {
