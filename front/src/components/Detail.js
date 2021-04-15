@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Button, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import DeatilGraph from "./DeatilGraph";
+import DeatilGraphForSub from "./DeatilGraphForSub";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -33,13 +34,35 @@ const SubContainer = styled.div`
 `;
 
 const SubContent = styled.div`
+  width: 100%;
+  height: 50vh;
+  background-color: aliceblue;
   border: 1px solid lightgray;
   margin-bottom: 2rem;
 `;
 
-function Detail({ name, data }) {
+function Detail({ name, data, indication }) {
   const history = useHistory();
+  const [mainIndication, setMainIndication] = useState(indication);
+  const [dataForShowInSub, setDataForShowInSub] = useState();
   console.log(data);
+
+  useEffect(() => {
+    const dataOrderByType = []
+  
+    data[mainIndication]
+    .filter(data => data.name === name)
+    .map((data => {
+      if (!(data.type in dataOrderByType)) {
+        dataOrderByType.push({
+          'name': data.type,
+          'metro': data.metro,
+          'suburb': data.suburb
+        })}
+    }));
+
+    setDataForShowInSub(dataOrderByType)
+  }, [mainIndication])
 
   return (
     <div style={{ padding: "2rem" }}>
@@ -50,6 +73,7 @@ function Detail({ name, data }) {
             color="primary"
             variant="contained"
             style={{ marginRight: "5px" }}
+            onClick = {() => setMainIndication(0)}
           >
             의사 수
           </Button>
@@ -57,6 +81,7 @@ function Detail({ name, data }) {
             color="primary"
             variant="contained"
             style={{ marginRight: "5px" }}
+            onClick = {() => setMainIndication(1)}
           >
             병원 수
           </Button>
@@ -64,6 +89,7 @@ function Detail({ name, data }) {
             color="primary"
             variant="contained"
             style={{ marginRight: "5px" }}
+            onClick = {() => setMainIndication(2)}
           >
             응급시설 수
           </Button>
@@ -71,16 +97,21 @@ function Detail({ name, data }) {
             color="primary"
             variant="contained"
             style={{ marginRight: "5px" }}
+            onClick = {() => setMainIndication(3)}
           >
             진료횟수
           </Button>
         </ButtonContainer>
         <MainContent>
-          <DeatilGraph data={data} />
+          <DeatilGraph data={data[mainIndication]} />
         </MainContent>
       </MainContainer>
+
       <SubContainer>
-        <SubContent>sub</SubContent>
+        <SubContent>sub
+          <DeatilGraphForSub data = {dataForShowInSub} />
+        
+        </SubContent>
       </SubContainer>
       <Button
         fullWidth
