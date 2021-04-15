@@ -194,7 +194,10 @@ const KakaoMap = ({ locations, mainValue, subValue }) => {
       kakao.maps.event.addListener(polygon, "click", function () {
         history.push({
           pathname: "/details",
-          state: { name: area.name },
+          state: { 
+            name: area.name,
+            indication: subValue
+          },
         });
       });
 

@@ -1,8 +1,9 @@
-import React, { PureComponent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button, Typography, Grid } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import DeatilGraph from "./DeatilGraph";
+import DeatilGraphForSub from "./DeatilGraphForSub";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -34,14 +35,17 @@ const SubContainer = styled.div`
 `;
 
 const SubContent = styled.div`
+  width: 100%;
+  height: 50vh;
+  background-color: aliceblue;
   border: 1px solid lightgray;
   margin-bottom: 2rem;
 `;
 
-function Detail({ name, data }) {
-  const [allLocation, setAllLocation] = useState([]);
+function Detail({ name, data, indication }) {
+  const [mainData, setMainData] = useState([]);
   const [btnIdx, setBtnIdx] = useState(0); //버튼인덱스
-
+  const [dataForShowInSub, setDataForShowInSub] = useState();
   const history = useHistory();
 
   const indicator = {
@@ -57,17 +61,36 @@ function Detail({ name, data }) {
     for (let i = 0; i < data[btnIdx].length; i += 17) {
       arr.push(data[btnIdx].slice(i, i + 17));
     }
-    setAllLocation(arr);
+    setMainData(arr);
   }, [btnIdx, data]);
 
   useEffect(() => {
-    console.log(allLocation);
-  }, [allLocation]);
+    console.log(mainData);
+  }, [mainData]);
 
   const handleClick = (e) => {
     console.log(e.currentTarget.value);
     setBtnIdx(parseInt(e.currentTarget.value));
   };
+
+  console.log(data);
+
+  useEffect(() => {
+    const dataOrderByType = [];
+
+    data[btnIdx]
+      .filter((data) => data.name === name)
+      .forEach((data) => {
+        if (!(data.type in dataOrderByType)) {
+          dataOrderByType.push({
+            name: data.type,
+            metro: data.metro,
+            suburb: data.suburb,
+          });
+        }
+      });
+    setDataForShowInSub(dataOrderByType);
+  }, [data, name, btnIdx]);
 
   return (
     <div style={{ padding: "2rem" }}>
@@ -115,7 +138,7 @@ function Detail({ name, data }) {
           </ButtonContainer>
         </MainContent>
         <Grid container spacing={3}>
-          {allLocation.map((location, index) => (
+          {mainData.map((location, index) => (
             <Grid
               item
               xs
@@ -134,8 +157,12 @@ function Detail({ name, data }) {
           ))}
         </Grid>
       </MainContainer>
+
       <SubContainer>
-        <SubContent>sub</SubContent>
+        <SubContent>
+          sub
+          <DeatilGraphForSub data={dataForShowInSub} />
+        </SubContent>
       </SubContainer>
       <Button
         fullWidth
@@ -150,5 +177,4 @@ function Detail({ name, data }) {
     </div>
   );
 }
-
 export default Detail;
