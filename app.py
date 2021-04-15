@@ -59,9 +59,6 @@ with open(dir + './detail_data/num_of_doctors_for_detail_page.json') as file:
     doctors_detail = json.loads(json_string)
     doctors_detail_data = doctors_detail_column.insert_many(doctors_detail)
 
-# DB에 잘들어갔는지 확인용 코드
-for doc in ambulance_detail_column.find({}, {'_id': False}):
-    pprint(doc)
 
 @app.route('/', methods = ['GET', 'POST'])
 def main():
@@ -84,7 +81,7 @@ def hospital_info():
     return jsonify(temp)
 
 # 응급차 메인
-@app.route('/ambulance', methods = ['GET', 'POST'])
+@app.route('/ambul-medic', methods = ['GET', 'POST'])
 def ambulance_info():
     temp = []
     for doc in ambulance_main_column.find({}, {'_id': False}):
@@ -118,26 +115,5 @@ def doctor_detail():
     # print(detail)
     return jsonify(detail)
 
-# 병원 상세
-# @app.route('/hospital_detail', methods = ['GET', 'POST'])
-# def hospital_detail():
-#     temp = []
-#     for doc in hospital_detail_column.find({}, {'_id': False}):
-#         temp.append(doc)
-#     return jsonify(temp)
-
-# # 응급, 의료인력 상세
-# @app.route('/ambulance_detail', methods = ['GET', 'POST'])
-# def ambulance():
-#     temp = []
-#     for doc in ambulance_detail_column.find({}, {'_id': False}):
-#         temp.append(doc)
-#     return jsonify(temp)
-
-# # 진료 상세
-# @app.route('/diagnosis_detail', methods = ['GET', 'POST'])
-# def diagnosis_detail():
-#     temp = []
-#     for doc in diagnosis_detail_column.find({}, {'_id': False}):
-#         temp.append(doc)
-#     return jsonify(temp)
+if __name__ == "__main__":
+    app.run("0.0.0.0", port=5000)

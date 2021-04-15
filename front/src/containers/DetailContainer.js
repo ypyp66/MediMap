@@ -1,6 +1,8 @@
 import React from "react";
 import Detail from "../components/Detail";
-import data from "../data/detail_all_combined.json";
+import axios from "axios";
+
+const data = axios.get("/detail").then(response => response.data)
 
 function DetailContainer({ location }) {
   const { name } = location.state;
