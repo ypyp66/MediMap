@@ -22,6 +22,11 @@ const MainContainer = styled.div`
   font-family: "Nanum Gothic Coding";
 `;
 
+const GraphContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(45%, auto));
+`;
+
 const MainContent = styled.div`
   display: flex;
   align-items: center;
@@ -44,7 +49,7 @@ const SubContent = styled.div`
 
 function Detail({ name, data, indication }) {
   const [mainData, setMainData] = useState([]);
-  const [btnIdx, setBtnIdx] = useState(0); //버튼인덱스
+  const [btnIdx, setBtnIdx] = useState(indication); //버튼인덱스
   const [dataForShowInSub, setDataForShowInSub] = useState();
   const history = useHistory();
 
@@ -137,7 +142,7 @@ function Detail({ name, data, indication }) {
             </Button>
           </ButtonContainer>
         </MainContent>
-        <Grid container spacing={3}>
+        <GraphContainer>
           {mainData.map((location, index) => (
             <Grid
               item
@@ -147,6 +152,7 @@ function Detail({ name, data, indication }) {
                 background: "white",
                 paddingBottom: "3rem",
                 margin: "1rem",
+                flex: 1,
               }}
             >
               <Typography variant="h6">
@@ -155,7 +161,7 @@ function Detail({ name, data, indication }) {
               <DeatilGraph key={btnIdx + index} data={location} />
             </Grid>
           ))}
-        </Grid>
+        </GraphContainer>
       </MainContainer>
 
       <SubContainer>
