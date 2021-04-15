@@ -3,7 +3,6 @@ import LocalHospitalIcon from "@material-ui/icons/LocalHospital";
 import MapContainer from "../containers/MapContainer";
 import MainMenuContainer from "../containers/MainMenuContainer";
 import styled from "styled-components";
-
 import "../styles/app.css";
 
 const NavBar = styled.div`

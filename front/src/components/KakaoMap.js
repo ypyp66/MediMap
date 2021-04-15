@@ -1,10 +1,10 @@
 /* global kakao */
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
 import "../styles/polygon.css";
 import "../styles/overlay.css";
 import * as api from "../api";
 import { connect } from "react-redux";
-import { useHistory } from "react-router-dom";
 
 const KakaoMap = ({ locations, mainValue, subValue }) => {
   const [isloaded, setIsloaded] = useState(false);

@@ -14,6 +14,7 @@ const ButtonContainer = styled.div`
 const MainContainer = styled.div`
   padding: 1rem;
   border: 1px solid lightgray;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   margin-top: 2rem;

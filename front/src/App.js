@@ -1,8 +1,8 @@
 import { composeWithDevTools } from "redux-devtools-extension";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
-import rootReducer from "./modules";
 import { Route } from "react-router-dom";
+import rootReducer from "./modules";
 import Home from "./components/Home";
 import DetailContainer from "./containers/DetailContainer";
 
