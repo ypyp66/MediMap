@@ -28,10 +28,10 @@ function Deatil_Graph({ data }) {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Bar dataKey="도" barSize={20} fill="#413ea0" />
         <Bar dataKey="시" barSize={20} fill="#07a281" />
-        <Line type="monotone" dataKey="도 평균" stroke="#ff7300" />
+        <Bar dataKey="도" barSize={20} fill="#413ea0" />
         <Line type="monotone" dataKey="시 평균" stroke="#ff7300" />
+        <Line type="monotone" dataKey="도 평균" stroke="#ff7300" />
         <Line type="monotone" dataKey="전체 평균" stroke="#ff7300" />
       </ComposedChart>
     </ResponsiveContainer>

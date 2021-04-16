@@ -19,6 +19,7 @@ const MainContainer = styled.div`
   width: inherit;
   background-color: #dcdcdc;
   font-family: "Nanum Gothic Coding";
+  margin-top: 2rem;
 `;
 
 const MainContent = styled.div`
@@ -34,12 +35,15 @@ const GraphContainer = styled.div`
 
 const SubContainer = styled.div`
   display: flex;
+  width: 50%;
   padding: 2rem;
   margin-top: 2rem;
   border: 1px solid lightgray;
   border-radius: 10px;
   background-color: #dcdcdc;
   font-family: "Nanum Gothic Coding";
+  justify-content: center;
+  align-items: "center";
   margin-bottom: 3rem;
 `;
 
@@ -47,7 +51,6 @@ const SubContent = styled.div`
   width: 100%;
   height: 25vh;
   background-color: white;
-  padding-bottom: 2rem;
 `;
 
 function Detail({ name, data, indication }) {
@@ -68,16 +71,12 @@ function Detail({ name, data, indication }) {
     splitMainDataByType();
   }, [btnIdx, data]);
 
-  useEffect(() => {
-    console.log(mainData);
-  }, [mainData]);
-
   const handleClick = (e) => {
     setBtnIdx(parseInt(e.currentTarget.value));
   };
 
   useEffect(() => {
-    getSubDataOrderByType();
+    setSubGraphData();
   }, [data, name, btnIdx]);
 
   const splitMainDataByType = useCallback(() => {
@@ -88,24 +87,20 @@ function Detail({ name, data, indication }) {
     setMainData(arr);
   }, [btnIdx, data]);
 
-  const getSubDataOrderByType = useCallback(() => {
-    const result = data[btnIdx]
-      .filter((data) => data.name === name.slice(0, 2))
-      .map((data) => {
-        delete data["도 평균"];
-        delete data["시 평균"];
-        delete data["전체 평균"];
-        return data;
-      });
+  const setSubGraphData = useCallback(() => {
+    const result = [...data[btnIdx].filter((data) => data.name === name)];
     setDataForShowInSub(result);
   }, [data, name, btnIdx]);
 
   return (
     <div style={{ padding: "2rem" }}>
       <Typography variant="h3">{name}</Typography>
-      <Typography variant="h5" style={{ marginTop: "2rem" }}>
-        전국 통계
-      </Typography>
+      <div style={{ display: "flex", marginTop: "2rem", alignItems: "center" }}>
+        <Typography variant="h5">전국 통계</Typography>
+        <Typography variant="subtitle1">
+          ('시' = 인구 50만 이상 지역, '도' = 인구 50만 미만 지역)
+        </Typography>
+      </div>
       <MainContainer>
         <MainContent>
           <Typography variant="h6">{indicator[btnIdx]}</Typography>
@@ -151,6 +146,7 @@ function Detail({ name, data, indication }) {
         <GraphContainer>
           {mainData.map((location, index) => (
             <Grid
+              key={btnIdx + index}
               item
               xs
               style={{
@@ -161,17 +157,20 @@ function Detail({ name, data, indication }) {
                 padding: "1rem 1rem 3rem 1rem",
               }}
             >
-              <Typography key={index} variant="h6">
+              <Typography variant="h6">
                 {location[0].type && location[0].type}
               </Typography>
-              <DeatilGraph key={btnIdx + index} data={location} />
+              <DeatilGraph data={location} />
             </Grid>
           ))}
         </GraphContainer>
       </MainContainer>
-      <Typography variant="h5" style={{ marginTop: "2rem" }}>
-        지역 통계
-      </Typography>
+      <div style={{ display: "flex", marginTop: "2rem", alignItems: "center" }}>
+        <Typography variant="h5">지역 통계</Typography>
+        <Typography variant="subtitle1">
+          ('의사수' 의 경우 인구 1000명당 의사수)
+        </Typography>
+      </div>
       <SubContainer>
         <SubContent>
           <DeatilGraphForSub data={dataForShowInSub} />

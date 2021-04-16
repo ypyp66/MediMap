@@ -5,19 +5,23 @@ import * as api from "../api/index";
 function DetailContainer({ location }) {
   const { name } = location.state;
   const { indication } = location.state;
-  const [subPageData, setSubPageData] = useState();
+  const [detailPageData, setDetailPageData] = useState([]);
+  const [isloading, setIsloading] = useState(false);
 
-  function getSubDatas() {
-    api.getAllSubDatas().then((res) => setSubPageData(res.data));
+  function getDetailDatas() {
+    api.getAllSubDatas().then((res) => {
+      setDetailPageData(res.data);
+      setIsloading(true);
+    });
   }
   useEffect(() => {
-    getSubDatas();
+    getDetailDatas();
   }, []);
 
   return (
     <>
-      {subPageData && (
-        <Detail name={name} data={subPageData} indication={indication} />
+      {isloading && (
+        <Detail name={name} data={detailPageData} indication={indication} />
       )}
     </>
   );

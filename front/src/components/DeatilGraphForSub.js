@@ -1,5 +1,4 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
 import {
   ComposedChart,
   Bar,
@@ -11,29 +10,30 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-function Deatil_Graph_For_Sub({ data, domain }) {
+function DeatilGraphForSub({ data }) {
   return (
     <ResponsiveContainer>
-      <ComposedChart
-        data={data}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        {console.log(data[0])}
+      <ComposedChart data={data}>
         <CartesianGrid stroke="#f5f5f5" />
         <XAxis dataKey="type" scale="auto" />
-        <YAxis scale="log" domain={[0.1, "auto"]} allowDataOverflow />
+        <YAxis scale="log" domain={[1, "auto"]} allowDataOverflow />
         <Tooltip />
         <Legend />
-        {data[0].도 && <Bar dataKey="도" barSize={20} fill="#413ea0" />}
-        {data[0].시 && <Bar dataKey="시" barSize={20} fill="#07a281" />}
+        <Bar
+          name="인구 50만 이상 지역"
+          dataKey="시"
+          barSize={20}
+          fill="#07a281"
+        />
+        <Bar
+          name="인구 50만 미만 지역"
+          dataKey="도"
+          barSize={20}
+          fill="#413ea0"
+        />
       </ComposedChart>
     </ResponsiveContainer>
   );
 }
 
-export default Deatil_Graph_For_Sub;
+export default DeatilGraphForSub;
