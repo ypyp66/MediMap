@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button, Typography, Grid } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
@@ -24,7 +24,7 @@ const MainContainer = styled.div`
 
 const GraphContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(45%, auto));
+  grid-template-columns: repeat(auto-fit, minmax(50%, auto));
 `;
 
 const MainContent = styled.div`
@@ -62,11 +62,7 @@ function Detail({ name, data, indication }) {
 
   useEffect(() => {
     //그래프 갯수 설정
-    let arr = [];
-    for (let i = 0; i < data[btnIdx].length; i += 17) {
-      arr.push(data[btnIdx].slice(i, i + 17));
-    }
-    setMainData(arr);
+    splitMainDataByType();
   }, [btnIdx, data]);
 
   useEffect(() => {
@@ -96,6 +92,14 @@ function Detail({ name, data, indication }) {
       });
     setDataForShowInSub(dataOrderByType);
   }, [data, name, btnIdx]);
+
+  const splitMainDataByType = useCallback(() => {
+    let arr = [];
+    for (let i = 0; i < data[btnIdx].length; i += 17) {
+      arr.push(data[btnIdx].slice(i, i + 17));
+    }
+    setMainData(arr);
+  }, [btnIdx, data]);
 
   return (
     <div style={{ padding: "2rem" }}>
@@ -148,11 +152,10 @@ function Detail({ name, data, indication }) {
               item
               xs
               style={{
-                height: "30vh",
+                height: "40vh",
                 background: "white",
                 paddingBottom: "3rem",
                 margin: "1rem",
-                flex: 1,
               }}
             >
               <Typography variant="h6">
