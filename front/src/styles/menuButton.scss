@@ -13,7 +13,7 @@ button {
 .sub_menu {
   display: none;
   position: absolute;
-  width: 100%;
+  width: 10rem;
   padding: 8px;
   left: 0;
   -webkit-border-radius: 8px;
@@ -22,6 +22,7 @@ button {
   background: #333;
   color: #fff;
   font-size: 14px;
+  text-align: center;
 }
 
 .sub_menu:after {

@@ -89,20 +89,15 @@ function Detail({ name, data, indication }) {
   }, [btnIdx, data]);
 
   const getSubDataOrderByType = useCallback(() => {
-    const dataOrderByType = [];
-
-    data[btnIdx]
-      .filter((data) => data.name === name)
-      .forEach((data) => {
-        if (!(data.type in dataOrderByType)) {
-          dataOrderByType.push({
-            name: data.type,
-            metro: data.metro,
-            suburb: data.suburb,
-          });
-        }
+    const result = data[btnIdx]
+      .filter((data) => data.name === name.slice(0, 2))
+      .map((data) => {
+        delete data["도 평균"];
+        delete data["시 평균"];
+        delete data["전체 평균"];
+        return data;
       });
-    setDataForShowInSub(dataOrderByType);
+    setDataForShowInSub(result);
   }, [data, name, btnIdx]);
 
   return (
@@ -159,7 +154,7 @@ function Detail({ name, data, indication }) {
               item
               xs
               style={{
-                height: "30vh",
+                height: "40vh",
                 background: "white",
                 paddingBottom: "3rem",
                 margin: "1rem",
@@ -179,7 +174,6 @@ function Detail({ name, data, indication }) {
       </Typography>
       <SubContainer>
         <SubContent>
-          sub
           <DeatilGraphForSub data={dataForShowInSub} />
         </SubContent>
       </SubContainer>

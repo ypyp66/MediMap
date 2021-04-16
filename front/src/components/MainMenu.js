@@ -27,10 +27,18 @@ function MainButton({ mainChange, subChange }) {
     { id: 2, name: "심장질환" },
   ];
   const targetData = [
-    { id: 0, name: "의사 수", description: "의사 수 설명" },
-    { id: 1, name: "진료건 수", description: "진료 수 설명" },
-    { id: 2, name: "병원 수", description: "병원 수 설명" },
-    { id: 3, name: "구급차 수", description: "구급차 수 설명" },
+    { id: 0, name: "의사 수", description: "의사 1인당 인구수" },
+    { id: 1, name: "진료건 수", description: "병원 1개당 인구수" },
+    {
+      id: 2,
+      name: "병원 수",
+      description: "응급시설(구급차/응급의료인력) 1개/1인당 인구수",
+    },
+    {
+      id: 3,
+      name: "구급차 수",
+      description: "연간 총 진료수랑 총인구 대비 진료받는 인구 비율",
+    },
   ];
 
   const useStyles = makeStyles((theme) => ({
@@ -50,8 +58,6 @@ function MainButton({ mainChange, subChange }) {
     }
     mainChange(name);
   };
-
-  const classes = useStyles();
 
   const subClick = (e) => {
     const { name } = e.currentTarget;

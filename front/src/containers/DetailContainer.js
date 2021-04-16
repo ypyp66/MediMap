@@ -1,14 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Detail from "../components/Detail";
-import axios from "axios";
-
-const data = axios.get("/detail").then(response => response.data)
+import * as api from "../api/index";
 
 function DetailContainer({ location }) {
   const { name } = location.state;
   const { indication } = location.state;
+  const [subPageData, setSubPageData] = useState();
 
-  return <Detail name={name} data={data} indication = {indication} />;
+  function getSubDatas() {
+    api.getAllSubDatas().then((res) => setSubPageData(res.data));
+  }
+  useEffect(() => {
+    getSubDatas();
+  }, []);
+
+  return (
+    <>
+      {subPageData && (
+        <Detail name={name} data={subPageData} indication={indication} />
+      )}
+    </>
+  );
 }
 
 export default DetailContainer;
