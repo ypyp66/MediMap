@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button, Typography, Grid } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
@@ -16,7 +16,6 @@ const MainContainer = styled.div`
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  margin-top: 2rem;
   width: inherit;
   background-color: #dcdcdc;
   font-family: "Nanum Gothic Coding";
@@ -28,23 +27,32 @@ const MainContent = styled.div`
   justify-content: space-between;
   margin-bottom: 1rem;
 `;
+const GraphContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(45%, auto));
+`;
 
 const SubContainer = styled.div`
   display: flex;
+  padding: 2rem;
   margin-top: 2rem;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  background-color: #dcdcdc;
+  font-family: "Nanum Gothic Coding";
+  margin-bottom: 3rem;
 `;
 
 const SubContent = styled.div`
   width: 100%;
-  height: 50vh;
-  background-color: aliceblue;
-  border: 1px solid lightgray;
-  margin-bottom: 2rem;
+  height: 25vh;
+  background-color: white;
+  padding-bottom: 2rem;
 `;
 
 function Detail({ name, data, indication }) {
   const [mainData, setMainData] = useState([]);
-  const [btnIdx, setBtnIdx] = useState(0); //버튼인덱스
+  const [btnIdx, setBtnIdx] = useState(indication); //버튼인덱스
   const [dataForShowInSub, setDataForShowInSub] = useState();
   const history = useHistory();
 
@@ -57,11 +65,7 @@ function Detail({ name, data, indication }) {
 
   useEffect(() => {
     //그래프 갯수 설정
-    let arr = [];
-    for (let i = 0; i < data[btnIdx].length; i += 17) {
-      arr.push(data[btnIdx].slice(i, i + 17));
-    }
-    setMainData(arr);
+    splitMainDataByType();
   }, [btnIdx, data]);
 
   useEffect(() => {
@@ -69,13 +73,22 @@ function Detail({ name, data, indication }) {
   }, [mainData]);
 
   const handleClick = (e) => {
-    console.log(e.currentTarget.value);
     setBtnIdx(parseInt(e.currentTarget.value));
   };
 
-  console.log(data);
-
   useEffect(() => {
+    getSubDataOrderByType();
+  }, [data, name, btnIdx]);
+
+  const splitMainDataByType = useCallback(() => {
+    let arr = [];
+    for (let i = 0; i < data[btnIdx].length; i += 17) {
+      arr.push(data[btnIdx].slice(i, i + 17));
+    }
+    setMainData(arr);
+  }, [btnIdx, data]);
+
+  const getSubDataOrderByType = useCallback(() => {
     const dataOrderByType = [];
 
     data[btnIdx]
@@ -95,6 +108,9 @@ function Detail({ name, data, indication }) {
   return (
     <div style={{ padding: "2rem" }}>
       <Typography variant="h3">{name}</Typography>
+      <Typography variant="h5" style={{ marginTop: "2rem" }}>
+        전국 통계
+      </Typography>
       <MainContainer>
         <MainContent>
           <Typography variant="h6">{indicator[btnIdx]}</Typography>
@@ -137,7 +153,7 @@ function Detail({ name, data, indication }) {
             </Button>
           </ButtonContainer>
         </MainContent>
-        <Grid container spacing={3}>
+        <GraphContainer>
           {mainData.map((location, index) => (
             <Grid
               item
@@ -147,17 +163,20 @@ function Detail({ name, data, indication }) {
                 background: "white",
                 paddingBottom: "3rem",
                 margin: "1rem",
+                padding: "1rem 1rem 3rem 1rem",
               }}
             >
-              <Typography variant="h6">
+              <Typography key={index} variant="h6">
                 {location[0].type && location[0].type}
               </Typography>
               <DeatilGraph key={btnIdx + index} data={location} />
             </Grid>
           ))}
-        </Grid>
+        </GraphContainer>
       </MainContainer>
-
+      <Typography variant="h5" style={{ marginTop: "2rem" }}>
+        지역 통계
+      </Typography>
       <SubContainer>
         <SubContent>
           sub
