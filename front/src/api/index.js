@@ -5,7 +5,7 @@ const getHospitals = () => axios.get("/hospital");
 const getAmbulMedics = () => axios.get("/ambul-medic");
 const getDiagnosis = () => axios.get("/diagnosis");
 
-const getSubAmbul = () => axios.get();
+export const getAllSubDatas = () => axios.get("/detail");
 
 export const getTargets = () =>
   axios
@@ -18,5 +18,3 @@ export const getTargets = () =>
         [...res4.data],
       ])
     );
-
-export const getSubPageAllData = () => {};

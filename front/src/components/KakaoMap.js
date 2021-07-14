@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 
 import "../styles/polygon.css";
 import "../styles/overlay.scss";
+import axios from "axios";
 
 const KakaoMap = ({ locations, mainValue, subValue }) => {
   const [isloaded, setIsloaded] = useState(false);
